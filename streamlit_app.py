@@ -1,4 +1,8 @@
 import streamlit
+import snowflake.connector
+import requests
+import pandas as pd
+from urllib.error import URLError
 
 streamlit.title('My Parents New Healthy Diner')
 
@@ -10,7 +14,6 @@ streamlit.text('🥑🍞 Avocado Toast')
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
-import pandas as pd
 my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 
 #Asignar la columna con nombre Fruit como el índice.
@@ -32,14 +35,14 @@ fruit_choice = streamlit.text_input('What fruit would you like information about
 streamlit.write('The user entered', fruit_choice)
 
 
-import requests
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + "kiwi")
 
 
 fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 streamlit.dataframe(fruityvice_normalized)
 
-import snowflake.connector
+streamlit.stop()
+
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
